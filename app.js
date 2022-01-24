@@ -29,6 +29,19 @@ spotifyApi
 
 app.get('/', (req, res, next) => {
     res.render("index");
-  });
+});
+
+app.get('/artist-search', (req, res, next) => {
+    console.log(req.query);
+    spotifyApi
+        .searchArtists(req.query.search)
+        .then(data => {
+            console.log('The received data from the API: ', data.body.artists.items[0].images[0].url);
+            res.render("search", { query: req.query.search, artists: data.body.artists.items });
+        })
+        .catch(err => console.log('The error while searching artists occurred: ', err));
+
+});
+
 
 app.listen(3000, () => console.log('My Spotify project running on port 3000 🎧 🥁 🎸 🔊'));
